@@ -22,7 +22,7 @@ class Category(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -30,3 +30,5 @@ class Category(models.Model):
             original = Category.objects.get(pk=self.pk)
             if original.name != self.name:
                 raise ValidationError("Nie można modyfikować nazwy kategorii systemowej")
+
+

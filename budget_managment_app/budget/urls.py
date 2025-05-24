@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import TransactionListView, TransactionCreateView, TransactionUpdateView, TransactionDeleteView, \
-    BalanceSummaryView
+    BalanceSummaryView, ExpenseChartView
 
 urlpatterns = [
     # Transakcje
@@ -9,4 +9,6 @@ urlpatterns = [
     path('transactions/<int:pk>/edit/', TransactionUpdateView.as_view(), name='transaction-edit'),
     path('transactions/<int:pk>/delete/', TransactionDeleteView.as_view(), name='transaction-delete'),
     path('summary/', BalanceSummaryView.as_view(), name='balance-summary'),
+    path('expenses/chart/', ExpenseChartView.as_view(), name='expense-chart')
+
 ]

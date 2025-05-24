@@ -26,9 +26,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),        # rejestracja, edycja, usunięcie konta
     path('categories/', include('categories.urls')),    # CRUD kategorii
     path('budget/', include('budget.urls')),      # CRUD transakcji + summary
-    path('', IndexView.as_view(), name='home'),
     # Logowanie, wylogowanie, reset hasła (z `django.contrib.auth`)
-    path('login/', auth_views.LoginView.as_view(
+    path('', auth_views.LoginView.as_view(
         template_name='registration/login.html',
         redirect_authenticated_user=True
     ), name='login'),

@@ -1,20 +1,33 @@
-
-
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Transaction
 from accounts.models import AccountBalance
+
+from categories.models import Category
+
 
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['category', 'amount', 'type', 'description', 'date']  # ← dodaj 'date'
+        fields = ['category', 'amount', 'type', 'description', 'date']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'amount': forms.NumberInput(attrs={'min': '0.01', 'step': '0.01'}),
         }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
+        # tylko kategorie tego użytkownika
+        if self.user:
+            self.fields['category'].queryset = Category.objects.filter(user=self.user)
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount is not None and amount <= 0:
+            raise ValidationError("Kwota musi być większa od zera.")
+        return amount
 
     def clean(self):
         cleaned_data = super().clean()
@@ -22,12 +35,8 @@ class TransactionForm(forms.ModelForm):
         tx_type = cleaned_data.get('type')
 
         if self.user and tx_type == 'expense':
-            from accounts.models import AccountBalance
             account = AccountBalance.objects.filter(user=self.user).first()
-
             if not account:
-                raise forms.ValidationError("Musisz najpierw ustawić saldo konta przed dokonaniem wydatku.")
-
+                raise ValidationError("Musisz najpierw ustawić stan konta.")
             if amount and amount > account.balance:
-                raise forms.ValidationError("Brak wystarczających środków na koncie.")
-
+                raise ValidationError("Brak wystarczających środków na koncie.")

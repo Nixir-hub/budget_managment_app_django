@@ -93,3 +93,6 @@ class Transaction(models.Model):
             account.balance += self.amount
         account.save()
         super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.date} - {self.category.name} - {self.amount}"

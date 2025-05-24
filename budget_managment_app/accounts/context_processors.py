@@ -1,4 +1,4 @@
-from .models import AccountBalance
+from accounts.models import AccountBalance
 
 def account_balance(request):
     if request.user.is_authenticated:

@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import  UserUpdateForm, AccountBalanceForm, CustomUserCreationForm
 from .models import CustomUser, AccountBalance
 from django.views.generic import TemplateView
+from categories.models import Category
+
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'
@@ -15,8 +17,18 @@ class RegisterView(FormView):
         user = form.save()
         login(self.request, user)
 
-        # Tworzymy domyślne saldo użytkownika = 0
+        # saldo = 0
         AccountBalance.objects.get_or_create(user=user, defaults={'balance': 0})
+
+        # saldo - tylko jeśli nie istnieje dlk wystarczających środkówa tego usera (bez względu na wielkość liter)
+        if not Category.objects.filter(user=user, name__iexact='Saldo').exists():
+            Category.objects.create(
+                user=user,
+                name='Saldo',
+                description='Kategoria systemowa do śledzenia salda',
+                is_system=True,
+                is_default=False
+            )
 
         return super().form_valid(form)
 
