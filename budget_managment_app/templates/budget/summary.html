@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h2>Podsumowanie miesiąca</h2>
+<p><strong>Przychody:</strong> {{ income }} zł</p>
+<p><strong>Wydatki:</strong> {{ expense }} zł</p>
+<p><strong>Saldo:</strong> {{ balance }} zł</p>
+
+<h3>Wykres (Przychody vs Wydatki)</h3>
+<canvas id="summaryChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const summaryData = [{ income }, { expense }];
+</script>
+<script src="{% static 'js/summary_chart.js' %}"></script>
+{% endblock %}

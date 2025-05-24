@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Twoje operacje</h2>
+<form method="get" class="form-inline mb-3">
+  <input type="text" name="category" placeholder="Kategoria" class="form-control mr-2" value="{{ request.GET.category }}">
+  <input type="date" name="date" class="form-control mr-2" value="{{ request.GET.date }}">
+  <button type="submit" class="btn btn-primary">Filtruj</button>
+</form>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Kategoria</th>
+      <th>Kwota</th>
+      <th>Typ</th>
+      <th>Opis</th>
+      <th>Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for transaction in object_list %}
+    <tr>
+      <td>{{ transaction.date }}</td>
+      <td>{{ transaction.category }}</td>
+      <td>{{ transaction.amount }}</td>
+      <td>{{ transaction.get_type_display }}</td>
+      <td>{{ transaction.description }}</td>
+      <td>
+        <a href="{% url 'transaction-edit' transaction.pk %}" class="btn btn-sm btn-warning">Edytuj</a>
+        <a href="{% url 'transaction-delete' transaction.pk %}" class="btn btn-sm btn-danger">Usuń</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">Brak operacji</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'transaction-add' %}" class="btn btn-success">Dodaj operację</a>
+<a href="{% url 'balance-summary' %}" class="btn btn-info">Zobacz podsumowanie</a>
+{% endblock %}

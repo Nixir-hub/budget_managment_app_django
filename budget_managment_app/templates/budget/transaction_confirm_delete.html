@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Czy na pewno chcesz usunąć tę operację?</h2>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Tak, usuń</button>
+  <a href="{% url 'transaction-list' %}" class="btn btn-secondary">Anuluj</a>
+</form>
+{% endblock %}
