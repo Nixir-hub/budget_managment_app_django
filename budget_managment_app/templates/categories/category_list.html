@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Twoje kategorie</h2>
+<ul>
+  {% for category in object_list %}
+    <li>
+      {{ category.name }}
+      <a href="{% url 'category-edit' category.pk %}" class="btn btn-sm btn-warning">Edytuj</a>
+      <a href="{% url 'category-delete' category.pk %}" class="btn btn-sm btn-danger">Usuń</a>
+    </li>
+  {% empty %}
+    <li>Brak kategorii</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'category-add' %}" class="btn btn-success">Dodaj kategorię</a>
+{% endblock %}

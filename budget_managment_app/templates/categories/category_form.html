@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{% if object %}Edytuj{% else %}Dodaj{% endif %} kategorię</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Zapisz</button>
+</form>
+{% endblock %}
