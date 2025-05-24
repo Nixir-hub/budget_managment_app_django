@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{% if object %}Edytuj{% else %}Dodaj{% endif %} operację</h2>
+<div class="balance-info">
+</div>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Zapisz</button>
+</form>
+{% endblock %}

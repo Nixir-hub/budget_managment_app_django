@@ -1,0 +1,30 @@
+# Python web framework
+Django>=4.2.0
+
+# Testing
+pytest>=7.3.1
+coverage>=7.2.7
+
+# Development tools
+pip>=23.0.0
+wheel>=0.40.0
+
+# Database
+psycopg2-binary>=2.9.6  # dla PostgreSQL
+
+# Security
+django-environ>=0.10.0
+python-dotenv>=1.0.0
+
+# Django utilities
+django-crispy-forms>=2.0
+django-debug-toolbar>=4.1.0
+
+# API (jeśli potrzebujesz)
+djangorestframework>=3.14.0
+
+# Date and time handling
+pytz>=2023.3
+
+# Static files
+whitenoise>=6.5.0

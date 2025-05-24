@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Kategorie</h2>
+    <a href="{% url 'category-add' %}" class="btn btn-primary mb-3">Dodaj kategorię</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Domyślna</th>
+                <th>Systemowa</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in object_list %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>{{ category.description }}</td>
+                <td>{% if category.is_default %}Tak{% else %}Nie{% endif %}</td>
+                <td>{% if category.is_system %}Tak{% else %}Nie{% endif %}</td>
+                <td>
+                    {% if not category.is_system %}
+                        <a href="{% url 'category-edit' category.pk %}" class="btn btn-sm btn-warning">Edytuj</a>
+                        <a href="{% url 'category-delete' category.pk %}" class="btn btn-sm btn-danger">Usuń</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Brak kategorii</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/charts.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="chart-container">
+                    <a href="{% url 'transaction-list' %}"
+                       class="chart-close-btn"
+                       title="Zamknij wykres">
+                        ✕
+                    </a>
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Analiza wydatków</h3>
+                    </div>
+                    <div class="card-body">
+                        <img src="{% url 'expense-chart' %}" 
+                             class="img-fluid" 
+                             alt="Wykres wydatków"
+                             style="max-width: 100%; height: auto;"
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
