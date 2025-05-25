@@ -17,6 +17,8 @@ from io import BytesIO
 from .models import Transaction
 from accounts.models import AccountBalance
 
+
+
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = 'budget/transaction_list.html'
@@ -24,6 +26,11 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Transaction.objects.filter(user=self.request.user)
+
+        category = self.request.GET.get("category")
+        if category:
+            queryset = queryset.filter(category__name__icontains=category)
+
         date_str = self.request.GET.get("date")
         if date_str:
             parsed_date = parse_date(date_str)

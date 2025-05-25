@@ -32,6 +32,7 @@ class RegisterView(FormView):
 
         return super().form_valid(form)
 
+
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = UserUpdateForm
@@ -40,6 +41,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = CustomUser

@@ -64,7 +64,7 @@ python manage.py runserver
 - Uprawnienia dostępu
 
 ### `budget/`
-- Tworzenie budżetów miesięcznych
+- Tworzenie budżetów 
 - Dodawanie przychodów i wydatków
 - Saldo i limity
 
@@ -75,6 +75,54 @@ python manage.py runserver
 ---
 
 ## 5. Modele danych (przykład)
+
+@startuml
+
+' Klasy użytkowników
+class CustomUser {
+  + username: String
+  + email: String
+  + first_name: String
+  + last_name: String
+  + is_active: Boolean
+  + is_staff: Boolean
+  + date_joined: DateTime
+}
+
+class AccountBalance {
+  + balance: Decimal
+  + __str__(): String
+}
+
+' Klasy transakcji i kategorii
+class Transaction {
+  + amount: Decimal
+  + date: Date
+  + description: Text
+  + type: String
+  + created_at: DateTime
+}
+
+class Category {
+  + name: String
+  + description: Text
+  + is_system: Boolean
+  + is_default: Boolean
+  + created_at: DateTime
+  + __str__(): String
+}
+
+' Relacje
+CustomUser "1" -- "1" AccountBalance : has >
+CustomUser "1" -- "*" Transaction : owns >
+CustomUser "1" -- "*" Category : owns >
+Transaction "*" -- "1" Category : belongs to >
+
+' Dziedziczenie
+AbstractUser <|-- CustomUser
+
+@enduml
+
 
 ```python
 class Category(models.Model):
@@ -136,4 +184,4 @@ class Transaction(models.Model):
 ## 10. Załączniki
 
 - `README.md` – podstawowy opis projektu
-- `requirements` – wymagane pakiety:
+- `requirements` – wymagane pakiety

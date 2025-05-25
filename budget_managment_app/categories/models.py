@@ -7,6 +7,7 @@ class Category(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Użytkownik"
     )
+
     name = models.CharField(max_length=100, verbose_name="Nazwa")
     description = models.TextField(blank=True, verbose_name="Opis")
     is_default = models.BooleanField(default=False, verbose_name="Domyślna")
@@ -30,5 +31,3 @@ class Category(models.Model):
             original = Category.objects.get(pk=self.pk)
             if original.name != self.name:
                 raise ValidationError("Nie można modyfikować nazwy kategorii systemowej")
-
-
