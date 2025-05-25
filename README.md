@@ -1,48 +1,78 @@
-# Aplikacja do zarzadzania wydatkami
-##  Dokumentacja techniczna
+📘 Aplikacja do zarządzania wydatkami – Dokumentacja techniczna
+Nazwa projektu: Budget Management App
+Technologie: Django, Python, HTML/CSS, SQLite/PostgreSQL
 
-**Nazwa projektu:** Budget Management App  
-**Technologie:** Django, Python, HTML/CSS, SQLite/PostgreSQL
+📑 Spis treści
+Opis projektu
 
----
+Struktura katalogów
 
-## 1. Opis projektu
+Wymagania i instalacja
 
-Aplikacja Django do zarządzania budżetem osobistym i domowym. Użytkownicy mogą tworzyć konta, kategorie wydatków, dodawać przychody i wydatki, a także przeglądać raporty finansowe.
+Aplikacje i funkcjonalności
 
----
+Modele danych
 
-## 2. Struktura katalogów
+Diagram UML
 
-```
+Uwierzytelnianie i autoryzacja
+
+Interfejs użytkownika
+
+Testowanie
+
+Deployment
+
+Załączniki
+
+1. Opis projektu
+Budget Management App to aplikacja Django umożliwiająca użytkownikom efektywne zarządzanie domowym i osobistym budżetem. System pozwala na:
+
+tworzenie kont użytkowników,
+
+dodawanie i zarządzanie kategoriami przychodów i wydatków,
+
+rejestrowanie transakcji finansowych,
+
+monitorowanie salda i limitów budżetowych,
+
+przeglądanie miesięcznych i rocznych raportów finansowych.
+
+Dzięki intuicyjnemu interfejsowi oraz funkcjom autoryzacji, użytkownicy mogą bezpiecznie śledzić swoją sytuację finansową.
+
+2. Struktura katalogów
+csharp
+Copy
+Edit
 budget_managment_app_django-main/
 │
 ├── budget_managment_app/        # Główna aplikacja Django
 │   ├── accounts/                # Zarządzanie kontami użytkowników
-│   ├── budget/                  # Obsługa budżetów
+│   ├── budget/                  # Obsługa budżetów, transakcji
 │   ├── categories/              # Kategorie wydatków i przychodów
 │   ├── core/                    # Konfiguracja główna (settings, urls)
 │   ├── static/                  # Statyczne zasoby (CSS, JS)
 │   ├── templates/               # Szablony HTML
-│   ├── tests/                   # Testy jednostkowe i integracyjne
+│   ├── tests/                   # Testy jednostkowe
 │   └── manage.py                # Uruchamianie projektu
 ├── requirements/                # Pliki z zależnościami
-├── .gitignore
 ├── README.md
+├── .gitignore
 └── pytest.ini
-```
+3. Wymagania i instalacja
+Wymagania systemowe:
 
----
+Python 3.8+
 
-## 3. Wymagania i instalacja
+Django 4.x
 
-**Wymagania systemowe:**
-- Python 3.8+
-- Django 4.x
-- pip
+pip
 
-**Instalacja:**
-```bash
+Instalacja:
+
+bash
+Copy
+Edit
 git clone <repo>
 cd budget_managment_app_django-main
 python -m venv venv
@@ -52,136 +82,127 @@ pip install -r requirements/base.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-```
+4. Aplikacje i funkcjonalności
+accounts/
+Rejestracja i logowanie
 
----
+Resetowanie hasła
 
-## 4. Aplikacje i funkcjonalności
+Edycja danych użytkownika
 
-### `accounts/`
-- Rejestracja, logowanie, zarządzanie kontem użytkownika
-- Resetowanie hasła
-- Uprawnienia dostępu
+System uprawnień
 
-### `budget/`
-- Tworzenie budżetów 
-- Dodawanie przychodów i wydatków
-- Saldo i limity
+budget/
+Tworzenie budżetów
 
-### `categories/`
-- Tworzenie kategorii przychodów/wydatków
+Rejestrowanie transakcji (przychody/wydatki)
 
+Monitorowanie salda
 
----
+Powiązanie z kategoriami
 
-## 5. Modele danych (przykład)
+categories/
+Tworzenie i zarządzanie kategoriami
 
-@startuml
+Kategorie globalne i przypisane do użytkownika
 
-' Klasy użytkowników
-class CustomUser {
-  + username: String
-  + email: String
-  + first_name: String
-  + last_name: String
-  + is_active: Boolean
-  + is_staff: Boolean
-  + date_joined: DateTime
-}
-
-class AccountBalance {
-  + balance: Decimal
-  + __str__(): String
-}
-
-' Klasy transakcji i kategorii
-class Transaction {
-  + amount: Decimal
-  + date: Date
-  + description: Text
-  + type: String
-  + created_at: DateTime
-}
-
-class Category {
-  + name: String
-  + description: Text
-  + is_system: Boolean
-  + is_default: Boolean
-  + created_at: DateTime
-  + __str__(): String
-}
-
-' Relacje
-CustomUser "1" -- "1" AccountBalance : has >
-CustomUser "1" -- "*" Transaction : owns >
-CustomUser "1" -- "*" Category : owns >
-Transaction "*" -- "1" Category : belongs to >
-
-' Dziedziczenie
-AbstractUser <|-- CustomUser
-
-@enduml
-
-
-```python
+5. Modele danych (przykład)
+python
+Copy
+Edit
 class Category(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(choices=(('income', 'Income'), ('expense', 'Expense')))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-```
-
-```python
+python
+Copy
+Edit
 class Transaction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     description = models.TextField(blank=True)
-```
+6. Diagram UML
+Poniższy szablon można wkleić w narzędzie typu PlantUML:
 
----
+pgsql
+Copy
+Edit
+@startuml
+class User {
+    +id
+    +username
+    +email
+    +password
+}
 
-## 6. Uwierzytelnianie i autoryzacja
+class Category {
+    +id
+    +name
+    +type
+    +user : FK -> User
+}
 
-- Django Auth
-- Middleware chroniący dostęp do widoków budżetu i transakcji
-- System rejestracji i aktywacji kont
+class Transaction {
+    +id
+    +amount
+    +date
+    +description
+    +category : FK -> Category
+}
 
----
+User "1" -- "many" Category
+Category "1" -- "many" Transaction
+@enduml
+7. Uwierzytelnianie i autoryzacja
+Wykorzystanie systemu django.contrib.auth
 
-## 7. Interfejs użytkownika
+Middleware chroniące widoki
 
-- Szablony HTML (Django templates)
-- System bazowy oparty o `base.html`
-- Widoki klasowe i funkcyjne (`views.py`)
-- Stylizacja przy użyciu CSS (możliwie Bootstrap)
+Obsługa rejestracji, logowania, resetu hasła
 
----
+Uprawnienia do danych ograniczone do właściciela (użytkownika)
 
-## 8. Testowanie
+8. Interfejs użytkownika
+Szablony HTML z dziedziczeniem z base.html
 
-- `pytest` jako główne narzędzie testowe (`pytest.ini`)
-- Testy jednostkowe w katalogu `tests/`
-- Możliwość testowania modeli, widoków, formularzy
+Stylizacja za pomocą CSS (z opcją dodania Bootstrap)
 
----
+Widoki: CBV (klasowe) i FBV (funkcyjne)
 
-## 9. Deployment
+Formularze Django Forms do interakcji z danymi
 
-**Rekomendowane środowisko:**
-- Serwer Ubuntu/Debian
-- Gunicorn + Nginx
-- Baza danych PostgreSQL
-- Użycie `.env` do konfiguracji produkcyjnej
+9. Testowanie
+Testy jednostkowe i integracyjne (pytest)
 
-**Podstawowe kroki:**
-- Ustawienie `ALLOWED_HOSTS`, `DEBUG=False`
-- Wdrożenie z użyciem `gunicorn` lub `uwsgi`
-- Konfiguracja bazy danych w `settings.py`
+Lokalizacja testów: katalog tests/
 
----
+Testowane komponenty: modele, widoki, formularze
 
-## 10. Załączniki
+10. Deployment
+Rekomendowane środowisko produkcyjne:
 
-- `README.md` – podstawowy opis projektu
-- `requirements` – wymagane pakiety
+System: Ubuntu/Debian
+
+Webserver: Gunicorn + Nginx
+
+Baza danych: PostgreSQL
+
+Kroki wdrożenia:
+
+DEBUG=False w settings.py
+
+Ustawienie ALLOWED_HOSTS
+
+Wdrożenie przez gunicorn lub uwsgi
+
+Konfiguracja .env dla danych poufnych
+
+11. Załączniki
+README.md – skrócony opis projektu
+
+requirements/ – pliki zależności
+
+pytest.ini – konfiguracja testów
+
+.gitignore – ignorowane pliki w repozytorium
