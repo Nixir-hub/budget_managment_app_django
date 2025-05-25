@@ -1,4 +1,4 @@
-
+Aplikacja do zarzadzania wydatkami
 # 📄 Dokumentacja techniczna
 
 **Nazwa projektu:** Budget Management App  
