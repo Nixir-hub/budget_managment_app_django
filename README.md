@@ -1,78 +1,48 @@
-📘 Aplikacja do zarządzania wydatkami – Dokumentacja techniczna
-Nazwa projektu: Budget Management App
-Technologie: Django, Python, HTML/CSS, SQLite/PostgreSQL
+# Aplikacja do zarzadzania wydatkami
+##  Dokumentacja techniczna
 
-📑 Spis treści
-Opis projektu
+**Nazwa projektu:** Budget Management App  
+**Technologie:** Django, Python, HTML/CSS, SQLite/PostgreSQL
 
-Struktura katalogów
+---
 
-Wymagania i instalacja
+## 1. Opis projektu
 
-Aplikacje i funkcjonalności
+Aplikacja Django do zarządzania budżetem osobistym i domowym. Użytkownicy mogą tworzyć konta, kategorie wydatków, dodawać przychody i wydatki, a także przeglądać raporty finansowe.
 
-Modele danych
+---
 
-Diagram UML
+## 2. Struktura katalogów
 
-Uwierzytelnianie i autoryzacja
-
-Interfejs użytkownika
-
-Testowanie
-
-Deployment
-
-Załączniki
-
-1. Opis projektu
-Budget Management App to aplikacja Django umożliwiająca użytkownikom efektywne zarządzanie domowym i osobistym budżetem. System pozwala na:
-
-tworzenie kont użytkowników,
-
-dodawanie i zarządzanie kategoriami przychodów i wydatków,
-
-rejestrowanie transakcji finansowych,
-
-monitorowanie salda i limitów budżetowych,
-
-przeglądanie miesięcznych i rocznych raportów finansowych.
-
-Dzięki intuicyjnemu interfejsowi oraz funkcjom autoryzacji, użytkownicy mogą bezpiecznie śledzić swoją sytuację finansową.
-
-2. Struktura katalogów
-csharp
-Copy
-Edit
+```
 budget_managment_app_django-main/
 │
 ├── budget_managment_app/        # Główna aplikacja Django
 │   ├── accounts/                # Zarządzanie kontami użytkowników
-│   ├── budget/                  # Obsługa budżetów, transakcji
+│   ├── budget/                  # Obsługa budżetów
 │   ├── categories/              # Kategorie wydatków i przychodów
 │   ├── core/                    # Konfiguracja główna (settings, urls)
 │   ├── static/                  # Statyczne zasoby (CSS, JS)
 │   ├── templates/               # Szablony HTML
-│   ├── tests/                   # Testy jednostkowe
+│   ├── tests/                   # Testy jednostkowe i integracyjne
 │   └── manage.py                # Uruchamianie projektu
 ├── requirements/                # Pliki z zależnościami
-├── README.md
 ├── .gitignore
+├── README.md
 └── pytest.ini
-3. Wymagania i instalacja
-Wymagania systemowe:
+```
 
-Python 3.8+
+---
 
-Django 4.x
+## 3. Wymagania i instalacja
 
-pip
+**Wymagania systemowe:**
+- Python 3.8+
+- Django 4.x
+- pip
 
-Instalacja:
-
-bash
-Copy
-Edit
+**Instalacja:**
+```bash
 git clone <repo>
 cd budget_managment_app_django-main
 python -m venv venv
@@ -82,127 +52,89 @@ pip install -r requirements/base.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-4. Aplikacje i funkcjonalności
-accounts/
-Rejestracja i logowanie
+```
 
-Resetowanie hasła
+---
 
-Edycja danych użytkownika
+## 4. Aplikacje i funkcjonalności
 
-System uprawnień
+### `accounts/`
+- Rejestracja, logowanie, zarządzanie kontem użytkownika
+- Resetowanie hasła
+- Uprawnienia dostępu
 
-budget/
-Tworzenie budżetów
+### `budget/`
+- Tworzenie budżetów 
+- Dodawanie przychodów i wydatków
+- Saldo i limity
 
-Rejestrowanie transakcji (przychody/wydatki)
+### `categories/`
+- Tworzenie kategorii przychodów/wydatków
 
-Monitorowanie salda
 
-Powiązanie z kategoriami
+---
 
-categories/
-Tworzenie i zarządzanie kategoriami
 
-Kategorie globalne i przypisane do użytkownika
 
-5. Modele danych (przykład)
-python
-Copy
-Edit
+## 5. Modele danych (przykład)
+```python
 class Category(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(choices=(('income', 'Income'), ('expense', 'Expense')))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-python
-Copy
-Edit
+```
+
+```python
 class Transaction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     description = models.TextField(blank=True)
-6. Diagram UML
-Poniższy szablon można wkleić w narzędzie typu PlantUML:
+```
 
-pgsql
-Copy
-Edit
-@startuml
-class User {
-    +id
-    +username
-    +email
-    +password
-}
+---
 
-class Category {
-    +id
-    +name
-    +type
-    +user : FK -> User
-}
+## 6. Uwierzytelnianie i autoryzacja
 
-class Transaction {
-    +id
-    +amount
-    +date
-    +description
-    +category : FK -> Category
-}
+- Django Auth
+- Middleware chroniący dostęp do widoków budżetu i transakcji
+- System rejestracji i aktywacji kont
 
-User "1" -- "many" Category
-Category "1" -- "many" Transaction
-@enduml
-7. Uwierzytelnianie i autoryzacja
-Wykorzystanie systemu django.contrib.auth
+---
 
-Middleware chroniące widoki
+## 7. Interfejs użytkownika
 
-Obsługa rejestracji, logowania, resetu hasła
+- Szablony HTML (Django templates)
+- System bazowy oparty o `base.html`
+- Widoki klasowe i funkcyjne (`views.py`)
+- Stylizacja przy użyciu CSS (możliwie Bootstrap)
 
-Uprawnienia do danych ograniczone do właściciela (użytkownika)
+---
 
-8. Interfejs użytkownika
-Szablony HTML z dziedziczeniem z base.html
+## 8. Testowanie
 
-Stylizacja za pomocą CSS (z opcją dodania Bootstrap)
+- `pytest` jako główne narzędzie testowe (`pytest.ini`)
+- Testy jednostkowe w katalogu `tests/`
+- Możliwość testowania modeli, widoków, formularzy
 
-Widoki: CBV (klasowe) i FBV (funkcyjne)
+---
 
-Formularze Django Forms do interakcji z danymi
+## 9. Deployment
 
-9. Testowanie
-Testy jednostkowe i integracyjne (pytest)
+**Rekomendowane środowisko:**
+- Serwer Ubuntu/Debian
+- Gunicorn + Nginx
+- Baza danych PostgreSQL
+- Użycie `.env` do konfiguracji produkcyjnej
 
-Lokalizacja testów: katalog tests/
+**Podstawowe kroki:**
+- Ustawienie `ALLOWED_HOSTS`, `DEBUG=False`
+- Wdrożenie z użyciem `gunicorn` lub `uwsgi`
+- Konfiguracja bazy danych w `settings.py`
 
-Testowane komponenty: modele, widoki, formularze
+---
 
-10. Deployment
-Rekomendowane środowisko produkcyjne:
+## 10. Załączniki
 
-System: Ubuntu/Debian
-
-Webserver: Gunicorn + Nginx
-
-Baza danych: PostgreSQL
-
-Kroki wdrożenia:
-
-DEBUG=False w settings.py
-
-Ustawienie ALLOWED_HOSTS
-
-Wdrożenie przez gunicorn lub uwsgi
-
-Konfiguracja .env dla danych poufnych
-
-11. Załączniki
-README.md – skrócony opis projektu
-
-requirements/ – pliki zależności
-
-pytest.ini – konfiguracja testów
-
-.gitignore – ignorowane pliki w repozytorium
+- `README.md` – podstawowy opis projektu
+- `requirements` – wymagane pakiety
