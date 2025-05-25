@@ -130,7 +130,36 @@ Poniżej znajdują się rzeczywiste relacje między modelami w aplikacji:
 
 #### Diagram UML
 
+```mermaid
+classDiagram
+    class CustomUser {
+        <<AbstractUser>>
+    }
 
+    class Transaction {
+        - amount: Decimal
+        - date: Date
+        - description: String
+    }
+
+    class Category {
+        - name: String
+        - type: String (income/expense)
+    }
+
+    class AccountBalance {
+        - balance: Decimal
+    }
+
+    CustomUser "1" --o "1" AccountBalance : posiada
+    CustomUser "1" --o "*" Transaction : posiada
+    CustomUser "1" --o "*" Category : posiada
+    Transaction "*" --o "1" Category : należy do
+    Transaction "*" --o "1" CustomUser : należy do
+    Category "*" --o "1" CustomUser : należy do
+```
+
+---
 
 ## 6. Uwierzytelnianie i autoryzacja
 
