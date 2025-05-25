@@ -1,5 +1,5 @@
 # Aplikacja do zarzadzania wydatkami
-#  Dokumentacja techniczna
+##  Dokumentacja techniczna
 
 **Nazwa projektu:** Budget Management App  
 **Technologie:** Django, Python, HTML/CSS, SQLite/PostgreSQL
