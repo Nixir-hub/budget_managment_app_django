@@ -85,22 +85,31 @@ python manage.py runserver
 
 ---
 
-## 5. Modele danych (przykład)
+## 5. Modele danych i relacje
 
-```python
-class Category(models.Model):
-    name = models.CharField(max_length=255)
-    type = models.CharField(choices=(('income', 'Income'), ('expense', 'Expense')))
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-```
+Poniżej znajdują się rzeczywiste relacje między modelami w aplikacji:
 
-```python
-class Transaction(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    description = models.TextField(blank=True)
-```
+### Relacje między modelami
+
+- **Transaction (Transakcja)**
+  - `user` – klucz obcy do modelu użytkownika (`CustomUser`), relacja wiele-do-jednego
+  - `category` – klucz obcy do modelu `Category`, relacja wiele-do-jednego
+
+- **Category (Kategoria)**
+  - `user` – klucz obcy do modelu użytkownika (`CustomUser`), relacja wiele-do-jednego
+
+- **AccountBalance (Saldo konta)**
+  - `user` – relacja jeden-do-jednego z modelem użytkownika (`CustomUser`)
+
+- **CustomUser**
+  - Dziedziczy po `AbstractUser`
+
+#### Podsumowanie relacji
+
+- Jeden użytkownik (`CustomUser`) posiada wiele transakcji (`Transaction`)
+- Jeden użytkownik (`CustomUser`) posiada wiele kategorii (`Category`)
+- Jedna transakcja (`Transaction`) należy do jednej kategorii (`Category`)
+- Każdy użytkownik (`CustomUser`) ma jedno saldo konta (`AccountBalance`)
 
 ### Opis modeli
 
