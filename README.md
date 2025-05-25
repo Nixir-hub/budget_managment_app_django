@@ -136,4 +136,4 @@ class Transaction(models.Model):
 ## 10. Załączniki
 
 - `README.md` – podstawowy opis projektu
-- `requirements` – wymagane pakiety:
+- `requirements` – wymagane pakiety
