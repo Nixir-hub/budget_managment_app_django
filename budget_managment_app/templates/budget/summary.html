@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h2>Podsumowanie miesiąca</h2>
+<h2>Podsumowanie</h2>
 <p><strong>Przychody:</strong> {{ income }} zł</p>
 <p><strong>Wydatki:</strong> {{ expense }} zł</p>
 <p><strong>Saldo:</strong> {{ balance }} zł</p>
-<a class="button" href="{% url 'expense-chart' %}">Analiza wydatków(wykres)</a>
+<a class="btn btn-primary btn-lg rounded-pill" href="{% url 'expense-chart' %}">
+  Wykres wydatków za ostatnie 6mc
+</a>
 <canvas id="summaryChart" width="400" height="200"></canvas>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

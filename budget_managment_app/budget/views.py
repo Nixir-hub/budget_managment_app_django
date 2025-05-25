@@ -11,6 +11,7 @@ from django.utils import timezone
 import matplotlib
 matplotlib.use('Agg')  # Musi być ustawione przed importem pyplot
 import matplotlib.pyplot as plt
+from django.utils.dateparse import parse_date
 import numpy as np
 from io import BytesIO
 from .models import Transaction
@@ -23,15 +24,11 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Transaction.objects.filter(user=self.request.user)
-        category = self.request.GET.get('category')
-        date = self.request.GET.get('date')
-
-        if category:
-            queryset = queryset.filter(category__name__icontains=category)
-
-        if date:
-            queryset = queryset.filter(date=date)
-
+        date_str = self.request.GET.get("date")
+        if date_str:
+            parsed_date = parse_date(date_str)
+            if parsed_date:
+                queryset = queryset.filter(date=parsed_date)
         return queryset
 
 

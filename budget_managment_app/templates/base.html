@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ml-auto">
 
-          <li class="nav-item"><a class="nav-link disabled" tabindex="-1">Saldo: {{ nav_balance }} zł</a></li>
+          <li class="nav-item"><a class="nav-link disabled" tabindex="-1" style="color: gold;">Saldo: {{ nav_balance }} zł</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'transaction-list' %}">Transakcje</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'category-list' %}">Kategorie</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'balance-summary' %}">Podsumowanie</a></li>

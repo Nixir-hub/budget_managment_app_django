@@ -1,127 +1,139 @@
-# System Zarządzania Wydatkami
 
-## Opis projektu
-Aplikacja webowa stworzona w Django do śledzenia i analizowania wydatków osobistych.
+# 📄 Dokumentacja techniczna
 
----
-
-## Wymagania systemowe
-- Python 3.10.12
-- Django
-- virtualenv
+**Nazwa projektu:** Budget Management App  
+**Technologie:** Django, Python, HTML/CSS, SQLite/PostgreSQL
 
 ---
 
-## Zainstalowane pakiety
-- coverage
-- django
+## 1. Opis projektu
+
+Aplikacja Django do zarządzania budżetem osobistym i domowym. Użytkownicy mogą tworzyć konta, kategorie wydatków, dodawać przychody i wydatki, a także przeglądać raporty finansowe.
+
+---
+
+## 2. Struktura katalogów
+
+```
+budget_managment_app_django-main/
+│
+├── budget_managment_app/        # Główna aplikacja Django
+│   ├── accounts/                # Zarządzanie kontami użytkowników
+│   ├── budget/                  # Obsługa budżetów
+│   ├── categories/              # Kategorie wydatków i przychodów
+│   ├── core/                    # Konfiguracja główna (settings, urls)
+│   ├── static/                  # Statyczne zasoby (CSS, JS)
+│   ├── templates/               # Szablony HTML
+│   ├── tests/                   # Testy jednostkowe i integracyjne
+│   └── manage.py                # Uruchamianie projektu
+├── requirements/                # Pliki z zależnościami
+├── .gitignore
+├── README.md
+└── pytest.ini
+```
+
+---
+
+## 3. Wymagania i instalacja
+
+**Wymagania systemowe:**
+- Python 3.8+
+- Django 4.x
 - pip
-- pytest
-- wheel
+
+**Instalacja:**
+```bash
+git clone <repo>
+cd budget_managment_app_django-main
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+pip install -r requirements/base.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
 ---
 
-## Instalacja
+## 4. Aplikacje i funkcjonalności
 
-1. Sklonuj repozytorium:  
-   ```bash
-   git clone [adres-repozytorium]
-Utwórz i aktywuj środowisko wirtualne:
-Linux/Mac:
+### `accounts/`
+- Rejestracja, logowanie, zarządzanie kontem użytkownika
+- Resetowanie hasła
+- Uprawnienia dostępu
 
-bash
-Copy
-Edit
-python -m virtualenv venv
-source venv/bin/activate
-Windows:
+### `budget/`
+- Tworzenie budżetów miesięcznych
+- Dodawanie przychodów i wydatków
+- Saldo i limity
 
-bash
-Copy
-Edit
-venv\Scripts\activate
-Zainstaluj wymagane pakiety:
+### `categories/`
+- Tworzenie kategorii przychodów/wydatków
 
-bash
-Copy
-Edit
-pip install -r requirements.txt
-Skonfiguruj ustawienia Django:
 
-Utwórz plik .env w głównym katalogu projektu.
+---
 
-Dodaj wymagane zmienne środowiskowe (np. SECRET_KEY).
+## 5. Modele danych (przykład)
 
-Skonfiguruj bazę danych w settings.py.
+```python
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    type = models.CharField(choices=(('income', 'Income'), ('expense', 'Expense')))
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+```
 
-Wykonaj migracje bazy danych:
+```python
+class Transaction(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    description = models.TextField(blank=True)
+```
 
-bash
-Copy
-Edit
-python manage.py migrate
-Skonfiguruj pliki statyczne:
-W settings.py dodaj:
+---
 
-python
-Copy
-Edit
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-Następnie wykonaj:
+## 6. Uwierzytelnianie i autoryzacja
 
-bash
-Copy
-Edit
-python manage.py collectstatic
-Uruchom serwer deweloperski:
+- Django Auth
+- Middleware chroniący dostęp do widoków budżetu i transakcji
+- System rejestracji i aktywacji kont
 
-bash
-Copy
-Edit
-python manage.py runserver
-Struktura projektu
-csharp
-Copy
-Edit
-project/
-├── manage.py
-├── static/
-│   └── css/
-│       └── charts.css
-├── templates/
-│   └── base.html
-├── staticfiles/          # Katalog dla zebranych plików statycznych
-├── venv/
-└── requirements.txt
-Funkcjonalności
-Śledzenie wydatków
+---
 
-Generowanie wykresów i raportów
+## 7. Interfejs użytkownika
 
-Kategoryzacja transakcji
+- Szablony HTML (Django templates)
+- System bazowy oparty o `base.html`
+- Widoki klasowe i funkcyjne (`views.py`)
+- Stylizacja przy użyciu CSS (możliwie Bootstrap)
 
-Analiza wydatków
+---
 
-Testy
-Aby uruchomić testy:
+## 8. Testowanie
 
-bash
-Copy
-Edit
-pytest
-Rozwój projektu
-Upewnij się, że masz zainstalowane wszystkie zależności deweloperskie.
+- `pytest` jako główne narzędzie testowe (`pytest.ini`)
+- Testy jednostkowe w katalogu `tests/`
+- Możliwość testowania modeli, widoków, formularzy
 
-Utwórz nową gałąź dla swoich zmian.
+---
 
-Napisz testy dla nowych funkcjonalności.
+## 9. Deployment
 
-Wykonaj testy przed wysłaniem pull request.
+**Rekomendowane środowisko:**
+- Serwer Ubuntu/Debian
+- Gunicorn + Nginx
+- Baza danych PostgreSQL
+- Użycie `.env` do konfiguracji produkcyjnej
 
-Autorzy
-Ernest Zduńczyk
+**Podstawowe kroki:**
+- Ustawienie `ALLOWED_HOSTS`, `DEBUG=False`
+- Wdrożenie z użyciem `gunicorn` lub `uwsgi`
+- Konfiguracja bazy danych w `settings.py`
 
-Wsparcie
-W przypadku problemów proszę utworzyć nowe zgłoszenie w systemie issues.
+---
+
+## 10. Załączniki
+
+- `README.md` – podstawowy opis projektu
+- `requirements` – wymagane pakiety:

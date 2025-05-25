@@ -45,12 +45,17 @@ class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(
         required=True,
         label="Adres e-mail",
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
+    )
+
+    username = forms.CharField(
+        label="username",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
     )
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['username', 'email', 'first_name', 'last_name']
         labels = {
             'first_name': 'Imię',
             'last_name': 'Nazwisko',
@@ -59,6 +64,14 @@ class UserUpdateForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_email(self):
+        return self.instance.email
+
+    def clean_username(self):
+        return self.instance.username
+
+
 
 class AccountBalanceForm(forms.ModelForm):
     class Meta:
