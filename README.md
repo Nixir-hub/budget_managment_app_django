@@ -191,7 +191,7 @@ Poniżej znajduje się uproszczony diagram UML przedstawiający modele:
 
 ---
 
-## Opis widoków
+## 11. Opis widoków
 
 ### accounts/views.py  
 ([Zobacz kod na GitHubie](https://github.com/Nixir-hub/budget_managment_app_django/blob/52b0ec655d5a14a48b273b0b943a1200d6905883/budget_managment_app/accounts/views.py))
