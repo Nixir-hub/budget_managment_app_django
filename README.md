@@ -1,8 +1,20 @@
-# Aplikacja do zarzadzania wydatkami
-##  Dokumentacja techniczna
+# Aplikacja do zarządzania wydatkami
 
-**Nazwa projektu:** Budget Management App  
-**Technologie:** Django, Python, HTML/CSS, SQLite/PostgreSQL
+## Spis treści
+
+1. [Opis projektu](#1-opis-projektu)
+2. [Struktura katalogów](#2-struktura-katalogów)
+3. [Wymagania i instalacja](#3-wymagania-i-instalacja)
+4. [Aplikacje i funkcjonalności](#4-aplikacje-i-funkcjonalności)
+5. [Modele danych](#5-modele-danych)
+    - [Opis modeli](#opis-modeli)
+    - [Diagram UML](#diagram-uml)
+6. [Uwierzytelnianie i autoryzacja](#6-uwierzytelnianie-i-autoryzacja)
+7. [Interfejs użytkownika](#7-interfejs-użytkownika)
+8. [Testowanie](#8-testowanie)
+9. [Deployment](#9-deployment)
+10. [Załączniki](#10-załączniki)
+11. [Opis widoków](#opis-widoków)
 
 ---
 
@@ -71,12 +83,10 @@ python manage.py runserver
 ### `categories/`
 - Tworzenie kategorii przychodów/wydatków
 
-
 ---
 
-
-
 ## 5. Modele danych (przykład)
+
 ```python
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -90,6 +100,46 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     description = models.TextField(blank=True)
+```
+
+### Opis modeli
+
+- **Category**  
+  Reprezentuje kategorię transakcji (np. "Jedzenie", "Transport"). Każda kategoria posiada nazwę, typ (przychód lub wydatek) oraz jest powiązana z użytkownikiem.
+
+    - `name` – nazwa kategorii
+    - `type` – typ: przychód (`income`) lub wydatek (`expense`)
+    - `user` – właściciel kategorii (relacja do modelu użytkownika)
+
+- **Transaction**  
+  Reprezentuje pojedynczą transakcję finansową (przychód lub wydatek), przypisaną do danej kategorii.
+
+    - `category` – powiązanie z kategorią
+    - `amount` – kwota transakcji
+    - `date` – data transakcji
+    - `description` – opcjonalny opis
+
+#### Diagram UML
+
+Poniżej znajduje się uproszczony diagram UML przedstawiający modele:
+
+```
++-------------+        +----------------+
+|   Category  |        |  Transaction   |
++-------------+        +----------------+
+| id          |◄───────| category_id    |
+| name        |        | amount         |
+| type        |        | date           |
+| user_id     |        | description    |
++-------------+        +----------------+
+      ▲
+      │
++-------------+
+|    User     |
++-------------+
+| id          |
+| ...         |
++-------------+
 ```
 
 ---
@@ -138,3 +188,40 @@ class Transaction(models.Model):
 
 - `README.md` – podstawowy opis projektu
 - `requirements` – wymagane pakiety
+
+---
+
+## Opis widoków
+
+### accounts/views.py  
+([Zobacz kod na GitHubie](https://github.com/Nixir-hub/budget_managment_app_django/blob/52b0ec655d5a14a48b273b0b943a1200d6905883/budget_managment_app/accounts/views.py))
+
+- **RegisterView** – rejestracja nowego użytkownika, tworzy domyślne saldo i kategorię systemową "Saldo".
+- **UserUpdateView** – edycja danych aktualnie zalogowanego użytkownika.
+- **UserDeleteView** – usunięcie aktualnie zalogowanego użytkownika.
+- **IndexView** – widok szablonu bazowego (base.html).
+- **AccountBalanceUpdateView** – edycja salda użytkownika.
+
+---
+
+### budget/views.py  
+([Zobacz kod na GitHubie](https://github.com/Nixir-hub/budget_managment_app_django/blob/52b0ec655d5a14a48b273b0b943a1200d6905883/budget_managment_app/budget/views.py))
+
+- **TransactionListView** – lista transakcji użytkownika (z filtrami po kategorii i dacie).
+- **TransactionCreateView** – dodanie nowej transakcji (przychód/wydatek).
+- **TransactionUpdateView** – edycja istniejącej transakcji.
+- **TransactionDeleteView** – usunięcie transakcji należących do użytkownika.
+- **BalanceSummaryView** – podsumowanie przychodów, wydatków i bilansu za bieżący miesiąc.
+- **ExpenseChartView** – generuje wykres wydatków z ostatnich 6 miesięcy.
+
+---
+
+### categories/views.py  
+([Zobacz kod na GitHubie](https://github.com/Nixir-hub/budget_managment_app_django/blob/52b0ec655d5a14a48b273b0b943a1200d6905883/budget_managment_app/categories/views.py))
+
+- **CategoryListView** – lista kategorii użytkownika.
+- **CategoryCreateView** – dodanie nowej kategorii.
+- **CategoryUpdateView** – edycja kategorii użytkownika (z blokadą dla kategorii systemowych).
+- **CategoryDeleteView** – usuwanie wybranej kategorii (z blokadą dla kategorii systemowych).
+
+---
