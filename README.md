@@ -132,26 +132,20 @@ Poniżej znajdują się rzeczywiste relacje między modelami w aplikacji:
 
 Poniżej znajduje się uproszczony diagram UML przedstawiający modele:
 
-```
-+-------------+        +----------------+
-|   Category  |        |  Transaction   |
-+-------------+        +----------------+
-| id          |◄───────| category_id    |
-| name        |        | amount         |
-| type        |        | date           |
-| user_id     |        | description    |
-+-------------+        +----------------+
-      ▲
-      │
-+-------------+
-|    User     |
-+-------------+
-| id          |
-| ...         |
-+-------------+
-```
+plantuml @startuml skinparam packageStyle rectangle skinparam classAttributeIconSize 0 skinparam linetype ortho
+class CustomUser { + username: String + email: String + phone: String + password: String + is_active: Boolean + is_staff: Boolean + created_at: DateTime + updated_at: DateTime }
+class AccountBalance { + balance: Decimal + last_updated: DateTime -- + update_balance() }
+class Category { + name: String + description: Text + type: Enum[income, expense] + is_active: Boolean + created_at: DateTime + updated_at: DateTime }
+class Transaction { + amount: Decimal + type: Enum[income, expense] + description: Text + transaction_date: Date + created_at: DateTime + updated_at: DateTime }
+class Budget { + month: Date + planned_amount: Decimal + created_at: DateTime + updated_at: DateTime }
+' Relacje CustomUser "1" -- "1" AccountBalance : posiada CustomUser "1" -- "_" Category : zarządza CustomUser "1" -- "_" Transaction : tworzy CustomUser "1" -- "_" Budget : planuje Category "1" -- "_" Transaction : kategoryzuje Category "1" -- "*" Budget : określa
+' Kolory i style CustomUser *-- AccountBalance Transaction o-- Category Budget o-- Category
+' Notatki note bottom of CustomUser Rozszerzenie standardowego użytkownika Django end note
+note right of Category Kategorie przychodów i wydatków end note
+note right of Transaction Wszystkie operacje finansowe end note
+' Stereotypy class CustomUser << (U,#87CEFA) >> class AccountBalance << (B,#98FB98) >> class Category << (C,#DDA0DD) >> class Transaction << (T,#F0E68C) >> class Budget << (B,#FFB6C1) >>
+@enduml
 
----
 
 ## 6. Uwierzytelnianie i autoryzacja
 
